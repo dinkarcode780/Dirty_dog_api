@@ -77,7 +77,7 @@ export const updateBlog = asyncHandler(async (req, res) => {
         const idx = imageIndexesArray[i];
 
         if (idx >= 0 && idx < updatedImages.length) {
-         e
+         
           if (updatedImages[idx]) {
             await deleteFileFromUploads(updatedImages[idx]);
           }
