@@ -44,7 +44,7 @@ const createDefaultAdmin = async () => {
     const hashedPassword = await hashValue(password);
 
     await Admin.create({
-      name: "Spirants",
+      name: "Dirtydog",
       email: "admin@dirtydog.com",
       password: hashedPassword,
       userType: "Admin",

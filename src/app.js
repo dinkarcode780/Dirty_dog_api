@@ -22,7 +22,7 @@ import blogRoute from "../src/api/routes/blogRoute.js";
 import testimonialRoute from "../src/api/routes/testimonialRoute.js";
 import financingRoute from "../src/api/routes/financingRoute.js";
 import galleryRoute from "../src/api/routes/galleryRoute.js";
-import adminRoute from "../src/api/routes/aboutRoute.js";
+import adminRoute from "../src/api/routes/adminRoute.js";
 import { fileURLToPath } from "url";
 
 

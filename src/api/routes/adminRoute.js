@@ -1,6 +1,6 @@
 import express from "express";
-import { upload } from "../middleware/multer";
-import { adminLogin, getAdmin, updateAdminProfile } from "../controllers/adminController";
+import { upload } from "../middleware/multer.js";
+import { adminLogin, getAdmin, updateAdminProfile } from "../controllers/adminController.js";
 
 
 
