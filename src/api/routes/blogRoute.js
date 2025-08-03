@@ -21,8 +21,8 @@ router.put(
 router.delete("/admin/deleteBlog", deleteBlog);
 
 
-router.get("/admin/getBloById", getBlogById);
-router.get("/users/getBloById", getBlogById);
+router.get("/admin/getBlogById", getBlogById);
+router.get("/users/getBlogById", getBlogById);
 
 
 
