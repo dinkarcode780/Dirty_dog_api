@@ -1,6 +1,8 @@
 import asyncHandler from "../../utils/asyncHandler.js";
 import aboutModel from "../../models/aboutModel.js";
 import { deleteFileFromUploads } from "../middleware/multer.js";
+import { normalizePath } from "../../utils/normalizePath.js";
+
 
 
 export const getAbout = asyncHandler(async (req, res) => {
@@ -98,7 +100,9 @@ export const updateAbout = asyncHandler(async (req, res) => {
     : [];
 
   if (req.files?.loyaldogsImage && req.files.loyaldogsImage.length > 0) {
-    const newImages = req.files.loyaldogsImage.map((file) => file.path);
+     const newImages = req.files.loyaldogsImage.map((file) =>
+      normalizePath(file)
+    );
     let updatedImages = [...about.loyaldogsImage];
 
     if (loyaldogsIndexesArray.length > 0) {
