@@ -30,13 +30,36 @@ export const upload = multer({
 });
 
 
+// export const deleteFileFromUploads = (filePath) => {
+//   if (!filePath) return;
+
+//   try {
+    
+//     const fileName = path.basename(filePath);
+//     const fullPath = path.join("uploads", fileName);
+
+//     if (fs.existsSync(fullPath)) {
+//       fs.unlinkSync(fullPath);
+//       console.log(`File deleted successfully: ${fullPath}`);
+//     } else {
+//       console.log(`File not found: ${fullPath}`);
+//     }
+//   } catch (error) {
+//     console.error(`Error deleting file: ${error.message}`);
+//   }
+// };
 export const deleteFileFromUploads = (filePath) => {
   if (!filePath) return;
 
   try {
+   
+    const normalizedPath = filePath.replace(/\\/g, "/");
+
+   
+    const fileName = path.basename(normalizedPath);
+
     
-    const fileName = path.basename(filePath);
-    const fullPath = path.join("uploads", fileName);
+    const fullPath = path.join(process.cwd(), "uploads", fileName);
 
     if (fs.existsSync(fullPath)) {
       fs.unlinkSync(fullPath);
@@ -48,3 +71,4 @@ export const deleteFileFromUploads = (filePath) => {
     console.error(`Error deleting file: ${error.message}`);
   }
 };
+
