@@ -50,82 +50,84 @@ export const updateAbout = asyncHandler(async (req, res) => {
     });
   }
 
- 
-  about.companyHistory = companyHistory
-    ? JSON.parse(companyHistory)
-    : about.companyHistory;
 
-  about.commitmentToQuality = commitmentToQuality
-    ? JSON.parse(commitmentToQuality)
-    : about.commitmentToQuality;
-
-  about.ownerInfo = ownerInfo ? JSON.parse(ownerInfo) : about.ownerInfo;
-
-  about.serviceAreas = serviceAreas
-    ? JSON.parse(serviceAreas)
-    : about.serviceAreas;
+  const safeJSONParse = (value) => {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return value;
+    }
+  };
 
  
-  const testimonialIndexesArray = testimonialIndexes
-    ? JSON.parse(testimonialIndexes)
-    : [];
+  about.companyHistory = companyHistory ? safeJSONParse(companyHistory) : about.companyHistory;
+  about.commitmentToQuality = commitmentToQuality ? safeJSONParse(commitmentToQuality) : about.commitmentToQuality;
+  about.serviceAreas = serviceAreas ? safeJSONParse(serviceAreas) : about.serviceAreas;
+
+ 
+  let parsedOwnerInfo = ownerInfo ? safeJSONParse(ownerInfo) : about.ownerInfo;
+
+  if (req.files?.ownerImage && req.files.ownerImage.length > 0) {
+    const newOwnerImagePath = normalizePath(req.files.ownerImage[0]);
+
+   
+    if (about.ownerInfo?.image) {
+      await deleteFileFromUploads(about.ownerInfo.image);
+    }
+
+    parsedOwnerInfo.image = newOwnerImagePath; 
+  }
+
+  about.ownerInfo = parsedOwnerInfo;
+
+ 
+  const testimonialIndexesArray = testimonialIndexes ? safeJSONParse(testimonialIndexes) : [];
 
   if (customerTestimonials) {
-    const newTestimonials = JSON.parse(customerTestimonials);
+    const newTestimonials = safeJSONParse(customerTestimonials);
     let updatedTestimonials = [...about.customerTestimonials];
 
     if (testimonialIndexesArray.length > 0) {
       for (let i = 0; i < testimonialIndexesArray.length; i++) {
         const idx = testimonialIndexesArray[i];
-
         if (idx >= 0 && idx < updatedTestimonials.length) {
-       
           updatedTestimonials[idx] = newTestimonials[i];
         } else {
-         
           updatedTestimonials.push(newTestimonials[i]);
         }
       }
     } else {
-     
       updatedTestimonials = newTestimonials;
     }
 
     about.customerTestimonials = updatedTestimonials;
   }
 
- 
-  const loyaldogsIndexesArray = loyaldogsIndexes
-    ? JSON.parse(loyaldogsIndexes)
-    : [];
+  
+  const loyaldogsIndexesArray = loyaldogsIndexes ? safeJSONParse(loyaldogsIndexes) : [];
 
   if (req.files?.loyaldogsImage && req.files.loyaldogsImage.length > 0) {
-     const newImages = req.files.loyaldogsImage.map((file) =>
-      normalizePath(file)
-    );
+    const newImages = req.files.loyaldogsImage.map((file) => normalizePath(file));
     let updatedImages = [...about.loyaldogsImage];
 
     if (loyaldogsIndexesArray.length > 0) {
-      loyaldogsIndexesArray.forEach(async (idx, i) => {
+      for (let i = 0; i < loyaldogsIndexesArray.length; i++) {
+        const idx = loyaldogsIndexesArray[i];
         if (idx >= 0 && idx < updatedImages.length) {
-        
           if (updatedImages[idx]) {
             await deleteFileFromUploads(updatedImages[idx]);
           }
           updatedImages[idx] = newImages[i];
         } else {
-     
           updatedImages.push(newImages[i]);
         }
-      });
+      }
     } else {
-    
       updatedImages = [...updatedImages, ...newImages];
     }
 
     about.loyaldogsImage = updatedImages;
   }
-
 
   await about.save();
 
