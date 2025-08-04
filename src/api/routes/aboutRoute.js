@@ -11,7 +11,7 @@ router.get("/users/getAbout",getAbout);
 
 router.put(
   "/admin/updateAbout",
-  upload.fields([{ name: "loyaldogsImage"}]),
+  upload.fields([{ name: "loyaldogsImage"},{ name: "ownerImage"}]),
   updateAbout
 );
 
